@@ -3,11 +3,10 @@ import type {Bus, PaginatedResponse} from "../types/bus.ts";
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export const busService = {
-    getAllBuses: async (): Promise<Bus[]> => {
-        const response = await fetch(`${API_BASE_URL}/bus`);
+    getAllBuses: async (page: number = 0): Promise<PaginatedResponse<Bus>> => {
+        const response = await fetch(`${API_BASE_URL}/bus?page=${page}`);
         if (!response.ok) throw new Error("Error al obtener los buses");
-        const data: PaginatedResponse<Bus> = await response.json();
-        return data.content;
+        return await response.json();
     },
 
     getBusById: async (id: number): Promise<Bus> => {

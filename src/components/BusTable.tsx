@@ -20,7 +20,7 @@ export const BusTable = () => {
 
     return (
         <div className="table-container">
-            <h2>Listado de Buses</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Listado de Buses</h2>
 
             <div className="bus-table-container">
                 <table className="bus-table">

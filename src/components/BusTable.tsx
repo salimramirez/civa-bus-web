@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useBuses } from "../hooks/useBuses.ts";
 import { Pagination } from "./Pagination.tsx";
 import "../styles/BusTable.css";
@@ -6,7 +7,7 @@ import "../styles/BusTable.css";
 export const BusTable = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const { buses, loading, error, totalPages } = useBuses(currentPage);
-
+    const navigate = useNavigate();
     const handleNext = () => {
         if (currentPage < totalPages - 1) setCurrentPage(prev => prev + 1);
     };
@@ -75,12 +76,14 @@ export const BusTable = () => {
                                 <td className="bus-table-td">{bus.brand.name}</td>
                                 <td className="bus-table-td">{bus.characteristics}</td>
                                 <td className="bus-table-td">
-                                        <span className={`bus-badge ${bus.active ? 'bus-badge-active' : 'bus-badge-inactive'}`}>
-                                            {bus.active ? 'Activo' : 'Inactivo'}
-                                        </span>
+                                    <span className={`bus-badge ${bus.active ? 'bus-badge-active' : 'bus-badge-inactive'}`}>
+                                        {bus.active ? 'Activo' : 'Inactivo'}
+                                    </span>
                                 </td>
                                 <td className="bus-table-td">
-                                    <button className="bus-action-btn">
+                                    <button
+                                        className="bus-action-btn"
+                                        onClick={() => navigate(`/bus/${bus.id}`)}>
                                         Ver detalle
                                     </button>
                                 </td>
@@ -102,8 +105,7 @@ export const BusTable = () => {
                 totalPages={totalPages}
                 onNext={handleNext}
                 onPrevious={handlePrevious}
-                disabled={loading}
-            />
+                disabled={loading} />
         </div>
     );
 };

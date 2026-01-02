@@ -2,14 +2,7 @@ import { useEffect, useState } from "react";
 import type { Bus } from "../types/bus.ts";
 import { busService } from "../services/busService.ts";
 
-interface UseBusesResult {
-    buses: Bus[];
-    loading: boolean;
-    error: string | null;
-    totalPages: number;
-}
-
-export const useBuses = (currentPage: number): UseBusesResult => {
+export const useBuses = (currentPage: number) => {
     const [buses, setBuses] = useState<Bus[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);

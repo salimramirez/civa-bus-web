@@ -1,6 +1,7 @@
-import { createBrowserRouter } from "react-router-dom";
+import {createBrowserRouter} from "react-router-dom";
 import App from "./App.tsx";
-import { BusTable } from "./components/BusTable.tsx";
+import {BusTable} from "./components/BusTable.tsx";
+import {BusDetail} from "./components/BusDetail.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -10,6 +11,10 @@ export const router = createBrowserRouter([
             {
                 index: true,
                 element: <BusTable />
+            },
+            {
+                path: "bus/:id",
+                element: <BusDetail />
             }
         ]
     }

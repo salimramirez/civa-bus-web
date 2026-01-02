@@ -1,6 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL;
-const USER = import.meta.env.VITE_API_USER;
-const PASS = import.meta.env.VITE_API_PASS;
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
+const USER = import.meta.env.VITE_API_USER || "civa_user";
+const PASS = import.meta.env.VITE_API_PASS || "civa_password";
 
 const authHeader = 'Basic ' + btoa(`${USER}:${PASS}`);
 

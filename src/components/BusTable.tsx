@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useBuses } from "../hooks/useBuses.ts";
 import { Pagination } from "./Pagination.tsx";
+import "../styles/BusTable.css";
 
 export const BusTable = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -21,42 +22,54 @@ export const BusTable = () => {
         <div className="table-container">
             <h2>Listado de Buses</h2>
 
-            <table border={1} style={{ width: '100%', textAlign: 'left', marginTop: '1rem', borderCollapse: 'collapse' }}>
-                <thead>
-                <tr style={{ backgroundColor: '#f2f2f2' }}>
-                    <th>ID</th>
-                    <th>Número de Bus</th>
-                    <th>Placa</th>
-                    <th>Fecha de Creación</th>
-                    <th>Marca</th>
-                    <th>Características</th>
-                    <th>Estado</th>
-                </tr>
-                </thead>
-                <tbody>
-                {buses.length > 0 ? (
-                    buses.map((bus) => (
-                        <tr key={bus.id}>
-                            <td>{bus.id}</td>
-                            <td>{bus.busNumber}</td>
-                            <td>{bus.plate}</td>
-                            <td>{new Date(bus.createdAt).toLocaleDateString()}</td>
-                            <td>{bus.brand.name}</td>
-                            <td>{bus.characteristics}</td>
-                            <td>
-                                    <span style={{ color: bus.active ? 'green' : 'red' }}>
-                                        {bus.active ? 'Activo' : 'Inactivo'}
-                                    </span>
-                            </td>
+            <div className="bus-table-container">
+                <table className="bus-table">
+                    <thead className="bus-table-thead">
+                        <tr>
+                            <th className="bus-table-th">ID</th>
+                            <th className="bus-table-th">Número de Bus</th>
+                            <th className="bus-table-th">Placa</th>
+                            <th className="bus-table-th">Fecha de Creación</th>
+                            <th className="bus-table-th">Marca</th>
+                            <th className="bus-table-th">Características</th>
+                            <th className="bus-table-th">Estado</th>
+                            <th className="bus-table-th">Acciones</th>
                         </tr>
-                    ))
-                ) : (
-                    <tr>
-                        <td colSpan={7} style={{ textAlign: 'center' }}>No hay buses disponibles.</td>
-                    </tr>
-                )}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody className="bus-table-tbody">
+                        {buses.length > 0 ? (
+                            buses.map((bus) => (
+                                <tr key={bus.id} className="bus-table-tr">
+                                    <td className="bus-table-td">{bus.id}</td>
+                                    <td className="bus-table-td">{bus.busNumber}</td>
+                                    <td className="bus-table-td">{bus.plate}</td>
+                                    <td className="bus-table-td">
+                                        {new Date(bus.createdAt).toLocaleDateString()}
+                                    </td>
+                                    <td className="bus-table-td">{bus.brand.name}</td>
+                                    <td className="bus-table-td">{bus.characteristics}</td>
+                                    <td className="bus-table-td">
+                                        <span className={`bus-badge ${bus.active ? 'bus-badge-active' : 'bus-badge-inactive'}`}>
+                                            {bus.active ? 'Activo' : 'Inactivo'}
+                                        </span>
+                                    </td>
+                                    <td className="bus-table-td">
+                                        <button className="bus-action-btn">
+                                            Ver detalle
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={8} className="bus-table-td-empty">
+                                    No hay buses disponibles.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
 
             <Pagination
                 currentPage={currentPage}

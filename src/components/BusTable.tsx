@@ -1,71 +1,83 @@
-import {useEffect, useState} from "react";
-import type {Bus} from "../types/bus.ts";
-import {busService} from "../services/busService.ts";
+import { useState } from "react";
+import { useBuses } from "../hooks/useBuses.ts";
+import { Pagination } from "./Pagination.tsx";
+import "../styles/BusTable.css";
 
 export const BusTable = () => {
-    const [buses, setBuses] = useState<Bus[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const [currentPage, setCurrentPage] = useState<number>(0);
+    const { buses, loading, error, totalPages } = useBuses(currentPage);
 
-    useEffect(() => {
-        const fetchBuses = async () => {
-            try {
-                setLoading(true);
-                const data = await busService.getAllBuses();
-                setBuses(data);
-            } catch (error) {
-                setError('No se pudieron cargar los buses.');
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const handleNext = () => {
+        if (currentPage < totalPages - 1) setCurrentPage(prev => prev + 1);
+    };
 
-        void fetchBuses();
-    }, []);
+    const handlePrevious = () => {
+        if (currentPage > 0) setCurrentPage(prev => prev - 1);
+    };
 
     if (loading) return <div>Cargando buses...</div>;
-    if (error) return <div style={{color: 'red'}}>{error}</div>;
+    if (error) return <div style={{ color: 'red' }}>{error}</div>;
 
     return (
         <div className="table-container">
-            <h2>Listado de Buses</h2>
-            <table border={1} style={{ width: '100%', textAlign: 'left', marginTop: '1rem', borderCollapse: 'collapse' }}>
-                <thead>
-                    <tr style={{backgroundColor: '#f2f2f2'}}>
-                        <th>ID</th>
-                        <th>Número de Bus</th>
-                        <th>Placa</th>
-                        <th>Fecha de Creación</th>
-                        <th>Marca</th>
-                        <th>Características</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {buses.length > 0 ? (
-                        buses.map((bus) => (
-                                <tr key={bus.id}>
-                                    <td>{bus.id}</td>
-                                    <td>{bus.busNumber}</td>
-                                    <td>{bus.plate}</td>
-                                    <td>{new Date(bus.createdAt).toLocaleDateString()}</td>
-                                    <td>{bus.brand.name}</td>
-                                    <td>{bus.characteristics}</td>
-                                    <td>
-                                        <span style={{color: bus.active ? 'green' : 'red'}}>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Listado de Buses</h2>
+
+            <div className="bus-table-container">
+                <table className="bus-table">
+                    <thead className="bus-table-thead">
+                        <tr>
+                            <th className="bus-table-th">ID</th>
+                            <th className="bus-table-th">Número de Bus</th>
+                            <th className="bus-table-th">Placa</th>
+                            <th className="bus-table-th">Fecha de Creación</th>
+                            <th className="bus-table-th">Marca</th>
+                            <th className="bus-table-th">Características</th>
+                            <th className="bus-table-th">Estado</th>
+                            <th className="bus-table-th">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="bus-table-tbody">
+                        {buses.length > 0 ? (
+                            buses.map((bus) => (
+                                <tr key={bus.id} className="bus-table-tr">
+                                    <td className="bus-table-td">{bus.id}</td>
+                                    <td className="bus-table-td">{bus.busNumber}</td>
+                                    <td className="bus-table-td">{bus.plate}</td>
+                                    <td className="bus-table-td">
+                                        {new Date(bus.createdAt).toLocaleDateString()}
+                                    </td>
+                                    <td className="bus-table-td">{bus.brand.name}</td>
+                                    <td className="bus-table-td">{bus.characteristics}</td>
+                                    <td className="bus-table-td">
+                                        <span className={`bus-badge ${bus.active ? 'bus-badge-active' : 'bus-badge-inactive'}`}>
                                             {bus.active ? 'Activo' : 'Inactivo'}
                                         </span>
                                     </td>
+                                    <td className="bus-table-td">
+                                        <button className="bus-action-btn">
+                                            Ver detalle
+                                        </button>
+                                    </td>
                                 </tr>
                             ))
-                    ) : (
-                        <tr>
-                            <td colSpan={7} style={{textAlign: 'center'}}>No hay buses disponibles.</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                        ) : (
+                            <tr>
+                                <td colSpan={8} className="bus-table-td-empty">
+                                    No hay buses disponibles.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onNext={handleNext}
+                onPrevious={handlePrevious}
+                disabled={loading}
+            />
         </div>
     );
 };

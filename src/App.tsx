@@ -2,16 +2,11 @@ import {BusTable} from "./components/BusTable.tsx";
 
 function App() {
     return (
-        <div style={{padding: '2rem', fontFamily: 'Arial, sans-serif'}}>
-            <header style={{
-                backgroundColor: '#003399',
-                padding: '1rem 2rem',
-                marginBottom: '2rem',
-                borderRadius: '8px',
-            }}>
-                <h1 style={{color: 'white', margin: 0, fontSize: '1.5rem'}}>CIVA - Reto Técnico</h1>
+        <div className="min-h-screen bg-gray-50 p-8">
+            <header className="bg-blue-900 px-8 py-4 mb-8 rounded-lg shadow-md">
+                <h1 className="text-white text-2xl font-bold m-0">CIVA - Reto Técnico</h1>
             </header>
-            <main>
+            <main className="max-w-7xl mx-auto">
                 <BusTable />
             </main>
         </div>
